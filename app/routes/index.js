@@ -1,7 +1,7 @@
 import { Router } from "express";
-import rutaComputador from "./routes.product";
+import rutaUser from "./routes.product";
 const ruta = Router();
 
-ruta.use("/api", rutaComputador);
+ruta.use("/api", rutaUser);
 
 export default ruta;

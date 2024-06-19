@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { crear, eliminar, listar, modificar, mostrar } from "../controllers/controller.product";
 
-const rutaComputador = Router();
+const rutaUser = Router();
 
-rutaComputador.get("/pc", mostrar);
-rutaComputador.get("/pc/:id", listar);
-rutaComputador.post("/pc", crear);
-rutaComputador.put("/pc/:id", modificar);
-rutaComputador.delete("/pc/:id", eliminar);
+rutaUser.get("/user", mostrar);
+rutaUser.get("/user/:id", listar);
+rutaUser.post("/user", crear);
+rutaUser.put("/user", modificar);
+rutaUser.delete("/user", eliminar);
 
-export default rutaComputador;
+export default rutaUser;
