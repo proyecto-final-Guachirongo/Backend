@@ -67,3 +67,11 @@ export const eliminar = async(req, res) => {
         res.json({"error": error})
     }
 };
+export const masVendido = async(req, res) => {
+    try {
+        const rest = await pool.query(`call SP_PROD_MAS_VENDIDO();`);
+        res.json({"respuesta": rest})
+    } catch (error) {
+        res.json({"eror": error})
+    }
+}

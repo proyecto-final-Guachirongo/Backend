@@ -1,6 +1,7 @@
+import bcrypt from "bcrypt";
+import { success, error } from "../message/message";
 import { pool } from "../config/mysqldb";
 import { config } from "dotenv";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 config();
 
@@ -71,21 +72,20 @@ export const eliminar = async(req, res) => {
 };
 
 export const logUser = async(req, res) =>{
-    const{NOMBRE, CLAVE} = req.body;
-    const hash = await bcrypt.hash(CLAVE, 2);
+    const{CORREO, clave} = req.body;
+    const hash = await bcrypt.hash(clave, 2);
     try {
-        const respuesta = await pool.query(`CALL SP_BUSCARU('${NOMBRE}')`);
+        const respuesta = await pool.query(`CALL SP_BUSCARU('${CORREO}')`);
         if (respuesta[0][0] == 0) {
             error(req, res, 404, "Usuario no existe");
             return;
         }
-        const match = await bcrypt.compare(CLAVE, respuesta[0][0][0].CLAVE)
+        const match = await bcrypt.compare(clave, respuesta[0][0][0].CLAVE)
         if (!match) {
             error(req, res, 401, "No está autorizado")
         }
 
         let payload = {
-            "usuario": NOMBRE,
             "nombre": respuesta[0][0][0].NOMBRE
         };
 
