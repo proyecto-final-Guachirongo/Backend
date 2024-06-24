@@ -6,16 +6,16 @@ let port = process.env.PORT || 3000;
 
 const doc = {
     info: {
-        title: 'User API',
-        description: 'Management of users'
+        title: 'API',
+        description: 'Management'
     },
     host: 'localhost:' + port + "/api"
 };
 
 const outputFile = './swagger-output.json';
 const routes = [
-    '../routes/routes.main.js', 
-    '../routes/routes.users.js',
+    '../routes/routes.product.js', 
+    '../routes/routes.user.js',
 ];
 
 /* NOTE: If you are using the express Router, you must pass in the 'routes' only the 

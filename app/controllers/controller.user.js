@@ -47,7 +47,8 @@ export const modificar = async(req, res) => {
     const APELLIDO = req.body.apellido;
     const CORREO = req.body.correo;
     const DOCUMENTO = req.body.documento;
-    const CLAVE = req.body.clave;
+    const CLAVESC = req.body.clave;
+    const CLAVE = CLAVESC;
     const FECHA_NACIMIENTO = req.body.fecha_nacimiento;
     const CELULAR = req.body.celular;
 
@@ -70,21 +71,21 @@ export const eliminar = async(req, res) => {
 };
 
 export const logUser = async(req, res) =>{
-    const{usuario, clave} = req.body;
-    const hash = await bcrypt.hash(clave, 2);
+    const{NOMBRE, CLAVE} = req.body;
+    const hash = await bcrypt.hash(CLAVE, 2);
     try {
-        const respuesta = await pool.query(`CALL SP_BUSCARUSUARIO('${usuario}')`);
+        const respuesta = await pool.query(`CALL SP_BUSCARU('${NOMBRE}')`);
         if (respuesta[0][0] == 0) {
             error(req, res, 404, "Usuario no existe");
             return;
         }
-        const match = await bcrypt.compare(clave, respuesta[0][0][0].CLAVE)
+        const match = await bcrypt.compare(CLAVE, respuesta[0][0][0].CLAVE)
         if (!match) {
             error(req, res, 401, "No está autorizado")
         }
 
         let payload = {
-            "usuario": usuario,
+            "usuario": NOMBRE,
             "nombre": respuesta[0][0][0].NOMBRE
         };
 
