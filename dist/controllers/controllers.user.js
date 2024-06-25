@@ -4,11 +4,14 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mostrar = exports.modificar = exports.masVendido = exports.listar = exports.eliminar = exports.crear = void 0;
+exports.mostrar = exports.modificar = exports.logUser = exports.listar = exports.eliminar = exports.crear = void 0;
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+var _bcrypt = _interopRequireDefault(require("bcrypt"));
+var _message = require("../message/message");
 var _mysqldb = require("../config/mysqldb");
 var _dotenv = require("dotenv");
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 (0, _dotenv.config)();
 var mostrar = exports.mostrar = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
@@ -18,7 +21,7 @@ var mostrar = exports.mostrar = /*#__PURE__*/function () {
         case 0:
           _context.prev = 0;
           _context.next = 3;
-          return _mysqldb.pool.query("call SP_MOSTRARP();");
+          return _mysqldb.pool.query("call SP_MOSTRARU();");
         case 3:
           rest = _context.sent;
           res.json({
@@ -51,7 +54,7 @@ var listar = exports.listar = /*#__PURE__*/function () {
           id = req.params['id'];
           _context2.prev = 1;
           _context2.next = 4;
-          return _mysqldb.pool.query("call SP_LISTARP(".concat(id, ");"));
+          return _mysqldb.pool.query("call SP_LISTARU(".concat(id, ");"));
         case 4:
           rest = _context2.sent;
           res.json({
@@ -77,39 +80,43 @@ var listar = exports.listar = /*#__PURE__*/function () {
 }();
 var crear = exports.crear = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
-    var NOMBRE, IMAGEN, DESCRIPCION, PRECIO, CANT_INICIAL, STOCK, COMPRADOS, ID_PROVEEDORES, respuesta;
+    var NOMBRE, APELLIDO, CORREO, DOCUMENTO, CLAVESC, FECHA_NACIMIENTO, CELULAR, hash, CLAVE, respuesta;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           NOMBRE = req.body.nombre;
-          IMAGEN = req.body.imagen;
-          DESCRIPCION = req.body.descripcion;
-          PRECIO = req.body.precio;
-          CANT_INICIAL = req.body.cant_inicial;
-          STOCK = req.body.stock;
-          COMPRADOS = req.body.comprados;
-          ID_PROVEEDORES = req.body.id_proveedores;
-          _context3.prev = 8;
-          _context3.next = 11;
-          return _mysqldb.pool.query("CALL SP_CREARP ('".concat(NOMBRE, "', '").concat(IMAGEN, "', '").concat(DESCRIPCION, "', '").concat(PRECIO, "', '").concat(CANT_INICIAL, "', '").concat(STOCK, "', '").concat(COMPRADOS, "', ").concat(ID_PROVEEDORES, ");"));
-        case 11:
+          APELLIDO = req.body.apellido;
+          CORREO = req.body.correo;
+          DOCUMENTO = req.body.documento;
+          CLAVESC = req.body.clave;
+          FECHA_NACIMIENTO = req.body.fecha_nacimiento;
+          CELULAR = req.body.celular;
+          _context3.prev = 7;
+          _context3.next = 10;
+          return _bcrypt["default"].hash(CLAVESC, 2);
+        case 10:
+          hash = _context3.sent;
+          CLAVE = hash;
+          _context3.next = 14;
+          return _mysqldb.pool.query("CALL SP_CREARU ('".concat(NOMBRE, "', '").concat(APELLIDO, "', '").concat(CORREO, "', '").concat(DOCUMENTO, "', '").concat(CLAVE, "', '").concat(FECHA_NACIMIENTO, "', '").concat(CELULAR, "');"));
+        case 14:
           respuesta = _context3.sent;
           res.json({
             "respuesta": respuesta
           });
-          _context3.next = 18;
+          _context3.next = 21;
           break;
-        case 15:
-          _context3.prev = 15;
-          _context3.t0 = _context3["catch"](8);
+        case 18:
+          _context3.prev = 18;
+          _context3.t0 = _context3["catch"](7);
           res.json({
             "error": _context3.t0
           });
-        case 18:
+        case 21:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[8, 15]]);
+    }, _callee3, null, [[7, 18]]);
   }));
   return function crear(_x5, _x6) {
     return _ref3.apply(this, arguments);
@@ -117,22 +124,22 @@ var crear = exports.crear = /*#__PURE__*/function () {
 }();
 var modificar = exports.modificar = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
-    var ID, NOMBRE, IMAGEN, DESCRIPCION, PRECIO, CANT_INICIAL, STOCK, COMPRADOS, ID_PROVEEDORES, rest;
+    var ID, NOMBRE, APELLIDO, CORREO, DOCUMENTO, CLAVESC, CLAVE, FECHA_NACIMIENTO, CELULAR, rest;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           ID = req.body.id;
           NOMBRE = req.body.nombre;
-          IMAGEN = req.body.imagen;
-          DESCRIPCION = req.body.descripcion;
-          PRECIO = req.body.precio;
-          CANT_INICIAL = req.body.cant_inicial;
-          STOCK = req.body.stock;
-          COMPRADOS = req.body.comprados;
-          ID_PROVEEDORES = req.body.id_proveedores;
+          APELLIDO = req.body.apellido;
+          CORREO = req.body.correo;
+          DOCUMENTO = req.body.documento;
+          CLAVESC = req.body.clave;
+          CLAVE = CLAVESC;
+          FECHA_NACIMIENTO = req.body.fecha_nacimiento;
+          CELULAR = req.body.celular;
           _context4.prev = 9;
           _context4.next = 12;
-          return _mysqldb.pool.query("call SP_MODIFICARP('".concat(ID, "' ,'").concat(NOMBRE, "', '").concat(IMAGEN, "', '").concat(DESCRIPCION, "', '").concat(PRECIO, "', '").concat(CANT_INICIAL, "', '").concat(STOCK, "', '").concat(COMPRADOS, "', '").concat(ID_PROVEEDORES, "');"));
+          return _mysqldb.pool.query("call SP_MODIFICARU('".concat(ID, "' ,'").concat(NOMBRE, "', '").concat(APELLIDO, "', '").concat(CORREO, "', '").concat(DOCUMENTO, "', '").concat(CLAVE, "', '").concat(FECHA_NACIMIENTO, "', '").concat(CELULAR, "');"));
         case 12:
           rest = _context4.sent;
           res.json({
@@ -165,7 +172,7 @@ var eliminar = exports.eliminar = /*#__PURE__*/function () {
           id = req.body.id;
           _context5.prev = 1;
           _context5.next = 4;
-          return _mysqldb.pool.query("call SP_ELIMINARP(".concat(id, ");"));
+          return _mysqldb.pool.query("call SP_ELIMINARU(".concat(id, ");"));
         case 4:
           rest = _context5.sent;
           res.json({
@@ -189,35 +196,61 @@ var eliminar = exports.eliminar = /*#__PURE__*/function () {
     return _ref5.apply(this, arguments);
   };
 }();
-var masVendido = exports.masVendido = /*#__PURE__*/function () {
+var logUser = exports.logUser = /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res) {
-    var rest;
+    var _req$body, CORREO, clave, hash, respuesta, match, payload, token;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
-          _context6.prev = 0;
+          _req$body = req.body, CORREO = _req$body.CORREO, clave = _req$body.clave;
           _context6.next = 3;
-          return _mysqldb.pool.query("call SP_PROD_MAS_VENDIDO();");
+          return _bcrypt["default"].hash(clave, 2);
         case 3:
-          rest = _context6.sent;
-          res.json({
-            "respuesta": rest
-          });
-          _context6.next = 10;
-          break;
+          hash = _context6.sent;
+          _context6.prev = 4;
+          _context6.next = 7;
+          return _mysqldb.pool.query("CALL SP_BUSCARU('".concat(CORREO, "')"));
         case 7:
-          _context6.prev = 7;
-          _context6.t0 = _context6["catch"](0);
-          res.json({
-            "eror": _context6.t0
+          respuesta = _context6.sent;
+          if (!(respuesta[0][0] == 0)) {
+            _context6.next = 11;
+            break;
+          }
+          (0, _message.error)(req, res, 404, "Usuario no existe");
+          return _context6.abrupt("return");
+        case 11:
+          _context6.next = 13;
+          return _bcrypt["default"].compare(clave, respuesta[0][0][0].CLAVE);
+        case 13:
+          match = _context6.sent;
+          if (!match) {
+            (0, _message.error)(req, res, 401, "No está autorizado");
+          }
+          payload = {
+            "nombre": respuesta[0][0][0].NOMBRE
+          };
+          _context6.next = 18;
+          return _jsonwebtoken["default"].sign(payload, process.env.TOKEN_PRIVATEKEY, {
+            expiresIn: process.env.TOKEN_EXPIRES_IN
           });
-        case 10:
+        case 18:
+          token = _context6.sent;
+          (0, _message.success)(req, res, 200, {
+            token: token
+          });
+          _context6.next = 25;
+          break;
+        case 22:
+          _context6.prev = 22;
+          _context6.t0 = _context6["catch"](4);
+          (0, _message.error)(req, res, 500, "Error en el servidor, por favor intente de nuevo");
+        case 25:
         case "end":
           return _context6.stop();
       }
-    }, _callee6, null, [[0, 7]]);
+    }, _callee6, null, [[4, 22]]);
   }));
-  return function masVendido(_x11, _x12) {
+  return function logUser(_x11, _x12) {
     return _ref6.apply(this, arguments);
   };
 }();

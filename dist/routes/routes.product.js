@@ -12,4 +12,5 @@ rutaProduct.get("/product/:id", _controller.listar);
 rutaProduct.post("/product", _controller.crear);
 rutaProduct.put("/product", _controller.modificar);
 rutaProduct["delete"]("/product", _controller.eliminar);
+rutaProduct.get("/vendidos", _controller.masVendido);
 var _default = exports["default"] = rutaProduct;

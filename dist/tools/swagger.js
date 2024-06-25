@@ -7,10 +7,10 @@ var _dotenv = require("dotenv");
 var port = process.env.PORT || 3000;
 var doc = {
   info: {
-    title: 'API',
-    description: 'Management'
+    title: 'BACKEND',
+    description: 'Manejo de procesos'
   },
-  host: 'localhost:' + port + "/api"
+  host: 'localhost:' + port + '/api'
 };
 var outputFile = './swagger-output.json';
 var routes = ['../routes/routes.product.js', '../routes/routes.user.js'];
